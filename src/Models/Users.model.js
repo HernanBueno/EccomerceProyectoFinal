@@ -1,6 +1,7 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose from "mongoose";
 
-const UserSchema = new Schema({
+
+const UserSchema = mongoose.Schema({
     name:{
         type: String,
         required: true
@@ -24,7 +25,11 @@ const UserSchema = new Schema({
     image:{
         type: String,
         required:true
+    },
+    isAdmin:{
+        type: Boolean,
+        default: false
     }
 });
-const modelo = mongoose.model('user', UserSchema);
-export default modelo;
+const UserModel = mongoose.model('user', UserSchema);
+export default UserModel;
