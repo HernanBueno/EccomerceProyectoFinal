@@ -24,13 +24,13 @@ async function orderEmail(email, order){
     
     return 
 }
-async function orderAdminEmail(email, order){
+async function orderAdminEmail(order){
     const transporter = createTransporter()
     const info = await transporter.sendMail({
         from: '"Respuesta Orden"<admin@admin.com>',
-        to: `${email}`,
+        to: 'admin@admin.com',
         subject: `Se realizo una compra`,
-        html:`<p>productos : ${order.products}</p><p>Total: ${order.amount}</p> <p>usuario: ${order.userID}</p>`
+        html:`<p>productos : ${order.products}</p><p>Total: ${order.amount}</p> <p>usuario: ${order.email}</p>`
     })
     
     return 

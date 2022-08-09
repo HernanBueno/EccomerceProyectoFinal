@@ -1,6 +1,6 @@
-import mongoose, { Schema } from "mongoose";
-
-const OrderSchema = new Schema({
+import mongoose from "mongoose";
+import { ObjectId } from "mongodb";
+const OrderSchema = mongoose.Schema({
     userID:{
         type: ObjectId,
         required: true,
@@ -14,9 +14,9 @@ const OrderSchema = new Schema({
         type:Object
 
     }],
-    amount:{
-        type:number
-    }
+    address:{type: String, required:true},
+    email:{type: String, required:true},
+    amount:{type:Number}
 });
-const modelo = mongoose.model('order', OrderSchema);
-export default modelo;
+const OrderModel = mongoose.model('order', OrderSchema);
+export default OrderModel;

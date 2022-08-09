@@ -35,12 +35,13 @@ async function postProducts (req, res){
     try {
         if(!name || !description || !price || !image)throw new Error('Faltan campos por completar')
         const prod= {name: name , description:description, price:price, image: image}
+        const productExist = await ProductModel.findOne({name:name})
+        if(productExist)throw new Error("Producto existente")
         ProductModel.create(prod)
         .then((p) => {
             res.status(201).json({msg: "se agrego producto", product: p})
         })
     .catch((e) => res.json({msg:e.message}));
-       
     } catch (error) {
         res.json({msg:error.message})
     }
