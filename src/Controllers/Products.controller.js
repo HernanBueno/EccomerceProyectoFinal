@@ -1,5 +1,5 @@
 import ProductModel from '../Models/Products.model.js'
-
+import fs from 'fs'
 
 
 //trae todos los productos o producto por id, dependiendo el endpoint y parametros
@@ -20,13 +20,18 @@ function  getProducts(req, res){
     }
 }
 //crea productos
-function postProducts (req, res){
+async function postProducts (req, res){
     
     const  name = req.body.name
     const description = req.body.description
     const price = req.body.price
-    const image = req.body.image
-    
+    let image = req.body.image
+    try {
+        await fs.promises.access(`./Uploads/${image}`)
+        image = `./../Uploads/${image}`
+    } catch (error) {
+        image = `./../uploads/producto.png`
+    }
     try {
         if(!name || !description || !price || !image)throw new Error('Faltan campos por completar')
         const prod= {name: name , description:description, price:price, image: image}

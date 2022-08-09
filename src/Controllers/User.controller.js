@@ -1,6 +1,7 @@
 import UserModel from "../Models/Users.model.js";
 import CryptoJS from 'crypto-js'
 import jwt from "jsonwebtoken"
+import {userEmail} from '../Utils/nodemailer.js'
 //Registro de usuario
 async function registerUser (req, res){
     let { name, lastname, email, password, phone, image, isAdmin} = req.body
@@ -11,7 +12,10 @@ try {
     if(!isAdmin) isAdmin = false
     password = CryptoJS.AES.encrypt(password, process.env.SECRET_KEY).toString()
     UserModel.create({name, lastname, email, password, phone, image, isAdmin})
-    .then(_user=> res.status(201).json({msg:"Usuario Creado con Exito"}))
+    .then(user=> {
+        res.status(201).json({msg:"Usuario Creado con Exito"})
+        userEmail(user)
+        })
     .catch(e=>res.json({msg:e.message}))
 } catch (error) {
     res.json({msg:error.message})

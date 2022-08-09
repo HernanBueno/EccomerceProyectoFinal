@@ -11,9 +11,12 @@ const OrderSchema = new Schema({
         default:Date.now
     },
     products:[{
-        type:ObjectId,
+        type:Object
 
-    }]
+    }],
+    amount:{
+        type:number
+    }
 });
 const modelo = mongoose.model('order', OrderSchema);
 export default modelo;

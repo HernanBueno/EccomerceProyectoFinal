@@ -1,5 +1,5 @@
 import { authorization } from "./authorization.js";
-
+//verifica si esta logueado primero y despues si isAdmin es true, si es false devuelve excepcion
 function verifyAdmin(req, res, next) {
    try {
     authorization(req, res, ()=>{

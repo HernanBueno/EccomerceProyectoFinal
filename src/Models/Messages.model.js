@@ -1,6 +1,6 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose from "mongoose";
 
-const MessageSchema = new Schema({
+const MessageSchema = mongoose.Schema({
     email:{
         type: String,
         required:true
@@ -13,5 +13,5 @@ const MessageSchema = new Schema({
         type:String
     }]
 });
-const modelo = mongoose.model('message', MessageSchema);
-export default modelo;
+const MessageModel = mongoose.model('message', MessageSchema);
+export default MessageModel;
