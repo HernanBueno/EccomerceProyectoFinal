@@ -10,23 +10,30 @@ const app = express()
 const httpServer = new HttpServer(app)
 const io = new IOServer(httpServer)
 
+
+
+app.use(express.static('src/public'))  
+app.use(cors({exposedHeaders:['*', 'authorization']}))
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended:true}))
  //chat con ws
-io.on('connection', async socket => {
-    const mensajes = await MessageModel.find()
+
+let mensajes = []
+MessageModel.find().then(m=> mensajes = m).catch(e=>console.log(e.message))
+io.on('connection', socket => {
+
     socket.emit('mensajes', mensajes)
     socket.on('nuevoMensaje', mensaje => {
         mensajes.push(mensaje)
         io.sockets.emit('mensajes', mensajes)
-        MessageModel.create(mensaje)
-        .then(m=> mensajes.push(m))
-        .catch(e=>console.log(e))
+        const guardar = async () =>{
+            MessageModel.create(mensaje)
+            .then()
+           .catch(e=>console.log(e.message))
+        }
+        guardar()
     })
 })
-
-
-app.use(cors({exposedHeaders:['*', 'authorization']}))
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({extended:true}))
 
 app.use('/', Router)
 //funcion para crear server

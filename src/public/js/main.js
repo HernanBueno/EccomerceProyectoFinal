@@ -3,7 +3,7 @@ const socket = io();
 async function addMessage(e) {
     const date = new Date()
     const mensaje = {
-        author: document.getElementById('email').value,
+        email: document.getElementById('email').value,
         text: document.getElementById('texto').value,
         date: date
     }
@@ -15,8 +15,8 @@ async function addMessage(e) {
 function makeHTML(mensajes) {
     return mensajes.map((elem, index) => {
         return (`<div>
-            <strong>${elem.email}              </strong>:
-            <em>${elem.text}</em> 
+            <strong>${elem.email}</strong>:
+            <em>${elem.text}</em> <br>
             <i>${elem.date}</i> </div>`)
     }).join(" ")
 }
