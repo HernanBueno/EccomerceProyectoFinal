@@ -4,7 +4,9 @@ import {Router as UsersRouter} from './User.routes.js'
 import { Router as CartsRouter } from './Carts.routes.js'
 import { Router as OrdersRouter } from "./Orders.routes.js";
 import { authorization } from '../Middlewares/authorization.js'
+import { getInfo } from '../Controllers/Info.controller.js';
 export const Router = express.Router()
+.get('/info', authorization, getInfo)
 .use('/productos', ProductsRouter)
 .use('/users', UsersRouter)
 .use('/carts', authorization, CartsRouter)

@@ -9,11 +9,10 @@ const storage = multer.diskStorage({
     }
 })
 
-const upload = multer({ storage:storage })
+let upload = multer({ storage:storage })
 
-
-exports.upload = upload.single("miFoto")
-
-exports.uploadFile = (_req,res) =>{
+upload = upload.single("miFoto")
+function uploadFile(_req,res){
     res.send({data:"El Archivo se subio correctamente"})
 }
+export{upload, uploadFile}
