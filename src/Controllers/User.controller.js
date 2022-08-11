@@ -48,8 +48,14 @@ async function loginUser(req, res){
 }
 //falta logout
 function logOut(req, res){
- let token = req.headers['authorization']
- console.log(token)
+    let authHeader = req.headers['authorization']
+     jwt.sign(authHeader, "", { expiresIn: 1 } , (logout, _err) => {
+        if (logout) {
+           res.send({msg : 'Has sido desconectado' });
+        } else {
+           res.send({msg:'Error'});
+        }
+     })
 }
 
 export{
