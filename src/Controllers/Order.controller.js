@@ -9,9 +9,9 @@ async function createOrder(req, res){
     const populate = { 
         path: 'products.productId'
     }
-  const cartID = req.params.cartID
+  const userID = req.user.id
   const address = req.body.address
-  const cart = await CartModel.findOne({_id: cartID}).populate(populate)
+  const cart = await CartModel.findOne({userID: userID}).populate(populate)
   let email = "";
   await UserModel.findOne({_id:cart.userID}).then(u => email = u.email).catch(e => console.log(e))
   let total=0 
@@ -23,7 +23,7 @@ async function createOrder(req, res){
     amount: total,
     address: address
     }
-CartModel.deleteOne({_id: cartID})
+await CartModel.deleteOne({userID: userID})
 OrderModel.create(order)
     .then(o=> {
       orderEmail(email, o)
@@ -36,7 +36,7 @@ OrderModel.create(order)
 
 //OBTENER LA ORDEN POR ID DE USUARIO
 function getOrderByID(req, res){
-    OrderModel.findOne({ userID: req.params.userID})
+    OrderModel.findOne({ userID: req.params.id})
     .then(o=> res.status(200).json(o))
     .catch(e=>res.json({msg: e.message}))
   
@@ -44,8 +44,8 @@ function getOrderByID(req, res){
 //ACTUALIZAR ORDEN
 
 function updateOrder(req, res) {
-    OrderModel.findByIdAndUpdate(
-         {_id: req.params.id},
+    OrderModel.findOneAndUpdate(
+         {userID: req.user.id},
          {
            $set: req.body,
          },
@@ -56,7 +56,7 @@ function updateOrder(req, res) {
    }
 //BORRAR ORDEN POR ID 
 function deleteOrder(req, res){
-    OrderModel.findByIdAndDelete({_id:req.params.id})
+    OrderModel.findOneAndDelete({userID:req.user.id})
     .then(_o=>res.status(200).json({msg:"La Order fue cancelada..."}))
     .catch(e=>res.json({msg: e.message}))
   }

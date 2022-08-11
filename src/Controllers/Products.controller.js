@@ -2,35 +2,30 @@ import ProductModel from '../Models/Products.model.js'
 import fs from 'fs'
 
 
-//trae todos los productos o producto por id, dependiendo el endpoint y parametros
-function  getProducts(req, res){
-    const {_id= undefined}= req.params
-    
-    try {
-        if(!_id){ 
-            ProductModel.find()
+//trae todos los productos 
+function  getAllProducts(req, res){
+    ProductModel.find()
             .then((product) => {res.status(200).json({products: product});})
             .catch((e) => res.status(500).json({msg:e.message}));
-        }else{
-            ProductModel.find({ _id: _id })
-        .then((product) => {res.status(200).json({products:product}) })
-        .catch((e) => res.status(500).json({msg:e.message}));}
-    } catch (error) {
-        res.status(500).json({msg:error.message})
-    }
 }
+
+//trae productos por id
+
+function getProductsByID(req, res) {
+    ProductModel.findOne({ _id: req.params.id })
+    .then((product) => {res.status(200).json({products:product}) })
+    .catch((e) => res.status(500).json({msg:e.message}))
+}
+
+
 //crea productos
 async function postProducts (req, res){
-    
-    const  name = req.body.name
-    const description = req.body.description
-    const price = req.body.price
-    let image = req.body.image
+    let {name, description, image, price} = req.body
     try {
         await fs.promises.access(`./Uploads/${image}`)
         image = `./../Uploads/${image}`
     } catch (error) {
-        image = `./../uploads/producto.png`
+        image = `../Uploads/producto.png`
     }
     try {
         if(!name || !description || !price || !image)throw new Error('Faltan campos por completar')
@@ -50,12 +45,9 @@ async function postProducts (req, res){
 //modifica Productos por id
 function putProducts(req, res){
     const _id = req.params.id
-    const  name = req.body.name
-    const description = req.body.description
-    const price = req.body.price
-    const image = req.body.image
+    const {name, description,  image, price} = req.body
     try {
-        if( !name || !description || !price || !image) throw new Error('Faltan campos para modificar')
+        if(!name || !description || !price || !image ) throw new Error('Faltan campos para modificar')
         ProductModel.update(
             { _id: _id },
             {
@@ -84,7 +76,8 @@ function deleteProducts(req, res) {
 
 
 export{
-    getProducts,
+    getAllProducts,
+    getProductsByID,
     postProducts,
     putProducts,
     deleteProducts

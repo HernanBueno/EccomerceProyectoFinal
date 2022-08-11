@@ -3,7 +3,8 @@ import { ObjectId } from "mongodb";
 const CartSchema = mongoose.Schema({
     userID:{
         type: ObjectId,
-        ref: 'user'
+        ref: 'user',
+        unique:true
     },
     products:[{productId:{type:ObjectId, ref:"product"}, quantity:{type:Number, default:1}}]
 });

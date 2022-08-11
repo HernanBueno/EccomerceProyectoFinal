@@ -7,7 +7,7 @@ import { authorization } from '../Middlewares/authorization.js'
 import { getInfo } from '../Controllers/Info.controller.js';
 export const Router = express.Router()
 .get('/info', authorization, getInfo)
-.use('/productos', ProductsRouter)
-.use('/users', UsersRouter)
-.use('/carts', authorization, CartsRouter)
-.use('/orders', authorization, OrdersRouter)
+.use('/api/products', ProductsRouter)
+.use('/', UsersRouter)
+.use('/api/shoppingcartproducts', authorization, CartsRouter)
+.use('/api/orders', authorization, OrdersRouter)

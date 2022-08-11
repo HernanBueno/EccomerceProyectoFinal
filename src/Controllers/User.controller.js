@@ -4,14 +4,14 @@ import jwt from "jsonwebtoken"
 import {userEmail} from '../Utils/nodemailer.js'
 //Registro de usuario
 async function registerUser (req, res){
-    let { name, lastname, email, password, phone, image, isAdmin} = req.body
+    let { name, lastname, email,image, password, phone, isAdmin} = req.body
     const existUser = await UserModel.findOne({email}).exec()
 try {
-    if( !name||!lastname||!email || !password || !phone || !image  ) throw new Error('Faltan Campos')
+    if( !name||!lastname||!email ||!image || !password || !phone   ) throw new Error('Faltan Campos')
     if(existUser) throw new Error('Usuario ya existente')
     if(!isAdmin) isAdmin = false
     password = CryptoJS.AES.encrypt(password, process.env.SECRET_KEY).toString()
-    UserModel.create({name, lastname, email, password, phone, image, isAdmin})
+    UserModel.create({name, lastname, email, password,image, phone, isAdmin})
     .then(user=> {
         res.status(201).json({msg:"Usuario Creado con Exito"})
         userEmail(user)
@@ -46,8 +46,14 @@ async function loginUser(req, res){
     }
 
 }
+//falta logout
+function logOut(req, res){
+ let token = req.headers['authorization']
+ console.log(token)
+}
 
 export{
 registerUser,
-loginUser
+loginUser,
+logOut
 }

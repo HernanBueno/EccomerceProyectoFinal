@@ -1,10 +1,10 @@
 import express from 'express'
-import { getProducts, putProducts, postProducts, deleteProducts } from '../Controllers/Products.controller.js'
+import { getAllProducts,getProductsByID, putProducts, postProducts, deleteProducts } from '../Controllers/Products.controller.js'
 import{ verifyAdmin} from '../Middlewares/verifyAdmin.js'
 import {upload, uploadFile} from '../Utils/multer.js'
 export const Router = express.Router()
-.get('/', getProducts)
-.get('/:id', getProducts)
+.get('/', getAllProducts)
+.get('/:id', getProductsByID)
 //solo administrador
 .post("/upload", verifyAdmin, upload, uploadFile)
 .post('/',verifyAdmin, postProducts)
