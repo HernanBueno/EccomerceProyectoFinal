@@ -5,23 +5,23 @@ import CartModel from '../Models/Carts.model.js'
 
 async function addProductsToCart(req, res){
     let newProduct = req.body.productId;
-    
     const user = req.user.id
-    const carrito= await CartModel.findOne({userID:user}).exec()
-    await carrito.products.forEach(element => {
-        console.log(element)
-    })
-    // carrito.products.forEach(p => { if(p.productId === newProduct){p.quantity = p.quantity + 1}});
-    // CartModel.update({userID:user }, {$set:{products: [carrito.products]}})
-    //         .then(_cart=> res.json({msg:"Se modifico el producto"}))
-    //         .catch(err=> res.json({msg: err.message}))
-//     }else{
-//         newProduct= {productId: newProduct} 
-//     CartModel.update({userID:user }, {$set:{products: [carrito.products, newProduct]}})
-//     .then(_cart=> res.json({msg:"Se Agrego el producto al carrito"}))
-//     .catch(err=> res.json({msg: err.message}))
-// }
+    let carrito= await CartModel.findOne({userID:user}).exec()
+    if(!carrito.products.find(e=> e.productId == newProduct)){
+    newProduct= {productId: newProduct} 
+    carrito.products.push(newProduct)
+    }else{
+   
+    carrito.products.forEach(element => {
+        if(element.productId == newProduct) element.quantity= element.quantity +1
+   })
+    }
+    carrito.save()
+    .then(_cart=> res.json({msg:"Se Agrego el producto al carrito"}))
+    .catch(err=> res.json({msg: err.message}))
+    
 }
+
 //BORRAR CARRITO POR ID de carrito
 function deleteCart(req, res) {
     CartModel.findOneAndDelete({_id:req.params.id})

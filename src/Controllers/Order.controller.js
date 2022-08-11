@@ -4,13 +4,14 @@ import { orderAdminEmail, orderEmail } from '../Utils/nodemailer.js'
 import CartModel from '../Models/Carts.model.js'
 
 
+
 // crear orden
 async function createOrder(req, res){
     const populate = { 
         path: 'products.productId'
     }
   const userID = req.user.id
-  const address = req.body.address
+  
   const cart = await CartModel.findOne({userID: userID}).populate(populate)
   let email = "";
   await UserModel.findOne({_id:cart.userID}).then(u => email = u.email).catch(e => console.log(e))
@@ -20,18 +21,18 @@ async function createOrder(req, res){
     userID: cart.userID,
     products: cart.products,
     email:email,
-    amount: total,
-    address: address
+    amount: total
     }
-await CartModel.deleteOne({userID: userID})
-OrderModel.create(order)
+    OrderModel.create(order)
     .then(o=> {
       orderEmail(email, o)
       orderAdminEmail(o)
-      res.json({msg:"Orden creada correctamente", order:o})})
-    .catch(e=>res.json({msg: e.message}))
+      CartModel.findOneAndDelete({userID:userID}).then().catch()
+      res.json({msg:" orden enviada con exito", o})})
+      .catch(e=> res.json({msg: e.message}))
+  }
 
-}
+
 
 
 //OBTENER LA ORDEN POR ID DE USUARIO

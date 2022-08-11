@@ -7,7 +7,8 @@ import { verifyAdmin } from '../Middlewares/verifyAdmin.js'
 export const Router = express.Router()
 .post('/',createOrder )
 .get('/:id', getOrderByID)
-.put('/', updateOrder)
-.delete('/',deleteOrder)
+
 //solo admin
+.put('/',verifyAdmin, updateOrder)
+.delete('/',verifyAdmin, deleteOrder)
 .get('/', verifyAdmin,getAllOrders)
