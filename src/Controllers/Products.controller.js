@@ -22,10 +22,10 @@ function getProductsByID(req, res) {
 async function postProducts (req, res){
     let {name, description, image, price} = req.body
     try {
-        await fs.promises.access(`./Uploads/${image}`)
-        image = `./../Uploads/${image}`
+        await fs.promises.access(`src/Uploads/${image}`)
+        image = `src/Uploads/${image}`
     } catch (error) {
-        image = `../Uploads/producto.png`
+        image = `src/Uploads/producto.png`
     }
     try {
         if(!name || !description || !price || !image)throw new Error('Faltan campos por completar')
