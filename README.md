@@ -52,7 +52,7 @@ El mismo esta realizado en NodeJS
 
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
-| `image`      | `file` | **Required**. |
+| `miFoto`      | `file` | **Required**. |
 
 
 
